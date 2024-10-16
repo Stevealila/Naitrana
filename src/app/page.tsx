@@ -1,9 +1,9 @@
-import LoginForm from "@/components/LoginForm";
+import Navbar from "@/components/Navbar";
 
 export default function Home() {
   return (
     <main>
-      <LoginForm />
+      <Navbar />
     </main>
   );
 }
