@@ -39,7 +39,7 @@ const Home: React.FC = async () => {
     <>
       <Navbar loggedInUser={loggedInUser} isEditor={isEditor} />
       <main>
-        {allBlogs.map(blog => (
+        {allBlogs.length > 0 && allBlogs.map(blog => (
           <div key={blog.id} className="max-w-sm rounded overflow-hidden shadow-lg w-5/6 mx-auto flex flex-col items-center justify-center mb-8">
             <div className="px-6 py-4 w-[96%]">
               <div className="text-gray-700 text-base">
