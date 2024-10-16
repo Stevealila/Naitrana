@@ -15,9 +15,8 @@ const Home: React.FC = async () => {
       : null;
     
       // If there's a logged-in user, find or create them in the database
-      let dbUser = null;
       if (loggedInUser) {
-        dbUser = await prisma.user.upsert({
+        await prisma.user.upsert({
           where: { email: loggedInUser.user.email },
           update: { name: loggedInUser.user.name, image: loggedInUser.user.image },
           create: {
