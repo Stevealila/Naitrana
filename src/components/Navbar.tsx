@@ -2,7 +2,15 @@ import LoginForm from './LoginForm'
 import Image from 'next/image';
 import LogOutForm from './LogoutForm';
 
-const Navbar = async ({ loggedInUser }: { loggedInUser: any }) => {
+interface LoggedInUser {
+  user: {
+    name: string;
+    email: string;
+    image: string;
+  };
+}
+
+const Navbar = async ({ loggedInUser }: { loggedInUser: LoggedInUser | null }) => {
   return (
     <ul className="flex border-b py-1 justify-end">
         { loggedInUser ? (

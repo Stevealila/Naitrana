@@ -8,7 +8,7 @@ const LoginForm = () => {
   const handleLogin = async (formData: FormData) => {
     const result = await loginWithGoogle(formData)
     if (result.action) {
-      await signIn(result.action, { callbackUrl: '/home' })
+      await signIn(result.action, { callbackUrl: '/' })
     }
   }
 
