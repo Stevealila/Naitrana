@@ -1,6 +1,6 @@
 "use server"
 
-import { signOut } from "@/auth"
+import {auth, signOut } from "@/auth"
 
 export const loginWithGoogle = async (formData: FormData) => {
     const action = formData.get('action') as string
@@ -16,9 +16,16 @@ export const loginOutOfGoogle = async () => await signOut({ redirectTo: '/' })
 
 
 import prisma from "@/lib/prisma"
+import { redirect } from "next/navigation"
 
-export const createBlog = async (formData: FormData, userEmail: string) => {
+export const createBlog = async (formData: FormData) => {
+  // grab logged-in user
+  const session = await auth();
+  if(!session?.user?.email) redirect('/');
+
   // Find the user by email to associate them as the author
+  const userEmail = session.user.email;
+  
   const user = await prisma.user.findUnique({
     where: { email: userEmail }
   });

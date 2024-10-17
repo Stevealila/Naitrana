@@ -2,7 +2,6 @@ import prisma from '@/lib/prisma';
 import Link from 'next/link';
 import DeleteBlog from '@/components/DeleteBlog';
 import CustomReactMarkdown from '@/components/CustomReactMarkdown';
-import Navbar from '@/components/Navbar';
 import { auth } from '@/auth';
 
 const Home: React.FC = async () => {
@@ -36,8 +35,6 @@ const Home: React.FC = async () => {
   const allBlogs = await prisma.blog.findMany({ orderBy: { updatedAt: 'desc' } });
 
   return (
-    <>
-      <Navbar loggedInUser={loggedInUser} isEditor={isEditor} />
       <main>
         {allBlogs.length > 0 && allBlogs.map(blog => (
           <div key={blog.id} className="max-w-sm rounded overflow-hidden shadow-lg w-5/6 mx-auto flex flex-col items-center justify-center mb-8">
@@ -66,7 +63,6 @@ const Home: React.FC = async () => {
           </div>
         ))}
       </main>
-    </>
   );
 };
 
