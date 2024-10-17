@@ -1,44 +1,20 @@
-import { updateBlog } from "@/actions";
-import prisma from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
-import { auth } from '@/auth'; 
+import { auth } from '@/auth'
+import CreateUpdateBlogForm from '@/components/CreateUpdateBlogForm'
+import prisma from '@/lib/prisma'
+import { redirect } from 'next/navigation'
+import React from 'react'
 
-const Update = async ({ params }: { params: { id: string } }) => {
-  const session = await auth(); // Get the logged-in user
+const page = async ({ params }: { params: { id: string } }) => {
+  
+  const session = await auth();
+  const blog = await prisma.blog.findUnique({ where: { id: params.id } })
 
-  const handleSubmit = async (formData: FormData) => {
-    "use server";
-    if (!session?.user?.email) {
-      throw new Error("User is not logged in");
-    }
-
-    const success = await updateBlog(params.id, formData, session.user.email); // Pass user's email
-    if (success) {
-      revalidatePath('/');
-      redirect('/');
-    }
-  };
-
-  const blog = await prisma.blog.findUnique({ where: { id: params.id } });
+  if (!session?.user?.email) redirect('/')
+  if (!blog) return <div>Blog not found</div>
 
   return (
-    <form action={ handleSubmit }
-      className="flex justify-center flex-col items-center">
-      <textarea 
-        name="content" 
-        id="Create" 
-        className="w-3/4 p-2 h-96 bg-gray-900 text-white mb-4" 
-        defaultValue={blog?.content}
-      ></textarea>
-      <button 
-        type="submit" 
-        className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
-      >
-        Send
-      </button>
-    </form>
-  );
-};
+    <CreateUpdateBlogForm blog={blog} userEmail={session.user.email} />
+  )
+}
 
-export default Update;
+export default page

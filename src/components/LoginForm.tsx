@@ -15,8 +15,8 @@ const LoginForm = () => {
   return (
     <form action={handleLogin}>
       <button type='submit' name='action' value='google'
-      className="bg-white inline-block py-2 px-4 text-gray-400 font-semibold"
-      >Login with Google</button>
+      className="bg-gray-200 rounded-full px-3 py-1 mx-1 text-sm font-semibold text-gray-700 hover:bg-gray-300"
+      >Login</button>
     </form>
   )
 }

@@ -23,15 +23,15 @@ const Navbar = async ({ session }: { session: Session | null }) => {
   const isEditor = loggedInUser?.email === 'stevealila25@gmail.com';
 
   return (
-    <ul className="flex border-b py-1 justify-end items-center">
-      <Link href='/'>Home</Link>
+    <ul className="flex border-b py-2 justify-end items-center">
+      <Link href='/' className='bg-gray-200 rounded-full px-3 py-1 mx-1 text-sm font-semibold text-gray-700 hover:bg-gray-300'>Home</Link>
       {loggedInUser ? (
         <>
           {/* Show Create Blog link only if the user is an editor */}
           {isEditor && (
             <li className="mr-4">
               <Link href="/blog/create">
-                <button className="bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 hover:bg-gray-300">
+                <button className="bg-gray-200 rounded-full px-3 py-1 mx-1 text-sm font-semibold text-gray-700 hover:bg-gray-300">
                   Create Blog
                 </button>
               </Link>
@@ -47,7 +47,7 @@ const Navbar = async ({ session }: { session: Session | null }) => {
           />
         </>
       ) : (
-        <li className="mr-1"><LoginForm /></li>
+        <li className="mr-4 ml-1"><LoginForm /></li>
       )}
     </ul>
   );
