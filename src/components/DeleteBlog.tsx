@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { auth } from '@/auth'; // Assuming you're using custom auth for session
 
 const DeleteBlog = async ({ id }: { id: string }) => {
-  const session = await auth(); // Retrieve the logged-in user's session
+  const session = await auth(); // Get the logged-in user
 
   const handleDelete = async () => {
     "use server";

@@ -2,33 +2,25 @@ import LoginForm from './LoginForm';
 import Image from 'next/image';
 import LogOutForm from './LogoutForm';
 import Link from 'next/link';
-import { auth } from '@/auth';
 import prisma from '@/lib/prisma';
+import { Session } from 'next-auth';
 
+const Navbar = async ({ session }: { session: Session | null }) => {
+  const loggedInUser = session?.user;
+  
+  if (loggedInUser) {
+    await prisma.user.upsert({
+      where: { email: loggedInUser.email! },
+      update: { name: loggedInUser.name!, image: loggedInUser.image! },
+      create: {
+        name: loggedInUser.name!,
+        email: loggedInUser.email!,
+        image: loggedInUser.image!
+      },
+    });
+  }
 
-const Navbar = async () => {
-
-  const session = await auth();
-
-  // Get logged-in user details
-    const loggedInUser = session && session.user && session.user.name && session.user.email && session.user.image
-      ? { user: { name: session.user.name, email: session.user.email, image: session.user.image } }
-      : null;
-    
-      // If there's a logged-in user, find or create them in the database
-      if (loggedInUser) {
-        await prisma.user.upsert({
-          where: { email: loggedInUser.user.email },
-          update: { name: loggedInUser.user.name, image: loggedInUser.user.image },
-          create: {
-            name: loggedInUser.user.name,
-            email: loggedInUser.user.email,
-            image: loggedInUser.user.image
-          },
-        });
-      }
-
-      const isEditor = loggedInUser?.user.email === 'stevealila25@gmail.com';
+  const isEditor = loggedInUser?.email === 'stevealila25@gmail.com';
 
   return (
     <ul className="flex border-b py-1 justify-end items-center">
@@ -47,8 +39,8 @@ const Navbar = async () => {
           )}
           <li className="mr-1"><LogOutForm /></li>
           <Image 
-            src={loggedInUser.user?.image as string}  
-            alt={loggedInUser.user?.name as string} 
+            src={loggedInUser?.image as string}  
+            alt={loggedInUser?.name as string} 
             height={32}
             width={32}
             className="rounded-full mr-4"

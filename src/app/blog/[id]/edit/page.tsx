@@ -2,7 +2,7 @@ import { updateBlog } from "@/actions";
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { auth } from '@/auth'; // Assuming you are using custom auth
+import { auth } from '@/auth'; 
 
 const Update = async ({ params }: { params: { id: string } }) => {
   const session = await auth(); // Get the logged-in user

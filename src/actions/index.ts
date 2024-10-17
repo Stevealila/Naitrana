@@ -1,6 +1,6 @@
 "use server"
 
-import {auth, signOut } from "@/auth"
+import { auth, signOut } from "@/auth"
 
 export const loginWithGoogle = async (formData: FormData) => {
     const action = formData.get('action') as string
