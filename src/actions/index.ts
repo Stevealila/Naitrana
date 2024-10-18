@@ -16,6 +16,7 @@ export const loginOutOfGoogle = async () => await signOut({ redirectTo: '/' })
 
 
 import prisma from "@/lib/prisma"
+import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 
 export const createBlog = async (formData: FormData) => {
@@ -35,7 +36,7 @@ export const createBlog = async (formData: FormData) => {
   }
 
   // Create the blog and link it to the user
-  return prisma.blog.create({
+  const newBlog = prisma.blog.create({
     data: {
       content: formData.get('content') as string,
       author: {
@@ -43,6 +44,8 @@ export const createBlog = async (formData: FormData) => {
       }
     }
   });
+  revalidatePath('/');
+  return newBlog;
 };
 
 
@@ -63,12 +66,15 @@ export const updateBlog = async (id: string, formData: FormData, userEmail: stri
     }
   
     // Proceed with the update
-    return prisma.blog.update({
+    const updatedBlog = prisma.blog.update({
       where: { id },
       data: {
         content: formData.get('content') as string,
       }
     });
+
+    revalidatePath('/');
+    return updatedBlog;
   };
   
   
