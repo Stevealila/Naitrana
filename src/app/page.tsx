@@ -19,7 +19,7 @@ const Home: React.FC = async () => {
           <div className="px-6 py-4 w-[96%]">
             <div className="text-gray-700 text-base">
               <CustomReactMarkdown content={
-                blog.content.length > 100 ? `${blog.content.slice(0, 100)}...` : blog.content
+                blog.content.length > 125 ? `${blog.content.slice(0, 125)}...` : blog.content
               } />
             </div>
           </div>
