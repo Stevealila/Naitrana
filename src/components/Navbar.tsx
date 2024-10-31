@@ -48,7 +48,7 @@ const Navbar = async ({ session }: { session: Session | null }) => {
         </>
       ) : (
         <li className="mr-4 ml-1">
-          {/* <LoginForm /> */}
+          <LoginForm />
           </li>
       )}
     </ul>
