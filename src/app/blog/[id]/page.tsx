@@ -16,6 +16,7 @@ const formatDate = (date: Date): string => {
 
 const OneBlog = async ({ params }: { params: { id: string } }) => {
     const blog = await prisma.blog.findUnique({ where: { id: params.id } })
+    const author = await prisma.user.findUnique({ where: { id: blog?.authorId } })
 
     if (!blog) {
         return <div>Blog not found</div>
@@ -29,6 +30,9 @@ const OneBlog = async ({ params }: { params: { id: string } }) => {
             <div className="px-6 pt-4 pb-2">
                 <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
                     #published {formatDate(blog.createdAt)}
+                </span>
+                <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
+                    #author: {author?.name}
                 </span>
             </div>
         </div>
