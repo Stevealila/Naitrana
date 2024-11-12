@@ -24,9 +24,6 @@ const OneBlog = async ({ params }: { params: { id: string } }) => {
 
     return (
         <div className="rounded overflow-hidden shadow-lg w-5/6 mx-auto flex flex-col items-center justify-center mb-8">
-            <div className="px-6 py-4 w-[96%]">
-                <CustomReactMarkdown content={blog.content} />
-            </div>
             <div className="px-6 py-2">
                 <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
                     #published {formatDate(blog.createdAt)}
@@ -34,6 +31,9 @@ const OneBlog = async ({ params }: { params: { id: string } }) => {
                 <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
                     #author: {author?.name}
                 </span>
+            </div>
+            <div className="px-6 py-4 w-[96%]">
+                <CustomReactMarkdown content={blog.content} />
             </div>
         </div>
     )
