@@ -23,12 +23,12 @@ const CreateUpdateBlogForm = ({ blog, userEmail }: CreateUpdateBlogFormProps) =>
       // Update existing blog
       const success = await updateBlog(blog.id, formData, userEmail);
       if (success) {
-        router.push('/');
+        router.push('/blog');
       }
     } else {
       // Create new blog
       await createBlog(formData);
-      router.push('/');
+      router.push('/blog');
     }
   };
 

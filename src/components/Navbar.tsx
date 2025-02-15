@@ -1,12 +1,12 @@
-import LoginForm from './LoginForm';
-import Image from 'next/image';
-import LogOutForm from './LogoutForm';
-import Link from 'next/link';
-import prisma from '@/lib/prisma';
-import { Session } from 'next-auth';
+import LoginForm from './LoginForm'
+import Image from 'next/image'
+import LogOutForm from './LogoutForm'
+import Link from 'next/link'
+import prisma from '@/lib/prisma'
+import { Session } from 'next-auth'
 
 const Navbar = async ({ session }: { session: Session | null }) => {
-  const loggedInUser = session?.user;
+  const loggedInUser = session?.user
   
   if (loggedInUser) {
     await prisma.user.upsert({
@@ -17,16 +17,17 @@ const Navbar = async ({ session }: { session: Session | null }) => {
         email: loggedInUser.email!,
         image: loggedInUser.image!
       },
-    });
+    })
   }
 
-  const isEditor = loggedInUser?.email === 'stevealila25@gmail.com';
+  const isEditor = loggedInUser?.email === 'stevealila25@gmail.com'
 
   return (
-    <ul className="flex border-b py-2 justify-end items-center">
-      <Link href='/' className='bg-gray-200 rounded-full px-3 py-1 mx-1 text-sm font-semibold text-gray-700 hover:bg-gray-300'>Home</Link>
+    <ul className="flex flex-wrap justify-center sm:justify-end items-center gap-4 border-b p-3">
       {loggedInUser ? (
         <>
+        <Link href='/tools' className='bg-gray-200 rounded-full px-3 py-1 mx-1 text-sm font-semibold text-gray-700 hover:bg-gray-300'>Tools</Link>
+        <Link href='/blog' className='bg-gray-200 rounded-full px-3 py-1 mx-1 text-sm font-semibold text-gray-700 hover:bg-gray-300'>Blog</Link>
           {/* Show Create Blog link only if the user is an editor */}
           {isEditor && (
             <li className="mr-4">
@@ -52,7 +53,7 @@ const Navbar = async ({ session }: { session: Session | null }) => {
           </li>
       )}
     </ul>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Navbar
