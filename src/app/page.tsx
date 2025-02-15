@@ -13,7 +13,7 @@ const Home = () => {
         Work Smarter, Not Harder
       </h1>
       <p className="text-lg sm:text-xl text-gray-600 text-center max-w-xl mb-6 animate-slide-up">
-        Naitrana is your trusted gateway to powerful automation. Discover tools that simplify, optimize,
+        Use tools that simplify, optimize,
         and scale your workflow—effortlessly.
       </p>
 
