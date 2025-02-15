@@ -14,6 +14,7 @@
     "@uiw/react-md-editor": "^4.0.4",
     "@vercel/postgres": "^0.10.0",
     "github-markdown-css": "^5.7.0",
+    "he": "^1.2.0",
     "next": "15.1.7",
     "next-auth": "^5.0.0-beta.22",
     "next-remove-imports": "^1.0.12",

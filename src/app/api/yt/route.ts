@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { GoogleGenerativeAI } from "@google/generative-ai"
 
-const YOUTUBE_API_KEY = process.env.GOOGLE_API_KEY
-const GEMINI_API_KEY = process.env.GOOGLE_API_KEY
+const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY
 
 type Comment = {
     comment: string
@@ -25,7 +24,7 @@ export async function POST(req: NextRequest) {
         const comments = await fetchYouTubeComments(videoId)
         const suggestions = await analyzeComments(comments)
 
-        return NextResponse.json({ videoId, comments, suggestions })
+        return NextResponse.json({ videoId, suggestions })
     } catch (error) {
         console.error("Error:", error)
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
@@ -55,7 +54,7 @@ function getYouTubeVideoId(url: string): string | null {
 }
 
 async function fetchYouTubeComments(videoId: string): Promise<Comment[]> {
-    const url = `https://www.googleapis.com/youtube/v3/commentThreads?part=snippet,replies&videoId=${videoId}&maxResults=100&order=relevance&key=${YOUTUBE_API_KEY}`
+    const url = `https://www.googleapis.com/youtube/v3/commentThreads?part=snippet,replies&videoId=${videoId}&maxResults=100&order=relevance&key=${GOOGLE_API_KEY}`
 
     const response = await fetch(url)
     if (!response.ok) throw new Error("Failed to fetch YouTube comments")
@@ -69,9 +68,9 @@ async function fetchYouTubeComments(videoId: string): Promise<Comment[]> {
 }
 
 async function analyzeComments(comments: Comment[]): Promise<string> {
-    if (!GEMINI_API_KEY) throw new Error("Missing Gemini AI API key")
+    if (!GOOGLE_API_KEY) throw new Error("Missing Gemini AI API key")
 
-    const genAI = new GoogleGenerativeAI(GEMINI_API_KEY)
+    const genAI = new GoogleGenerativeAI(GOOGLE_API_KEY)
     const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" })
 
     const prompt = `
