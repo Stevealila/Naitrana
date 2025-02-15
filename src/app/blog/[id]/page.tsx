@@ -14,7 +14,8 @@ const formatDate = (date: Date): string => {
   }).replace(',', '').replace(',', '');
 }
 
-const OneBlog = async ({ params }: { params: { id: string } }) => {
+const OneBlog = async (props: { params: Promise<{ id: string }> }) => {
+    const params = await props.params;
     const blog = await prisma.blog.findUnique({ where: { id: params.id } })
     const author = await prisma.user.findUnique({ where: { id: blog?.authorId } })
 
