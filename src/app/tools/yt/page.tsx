@@ -30,14 +30,12 @@ const YouTubeTool = () => {
             const data = await response.json();
             if (!response.ok) throw new Error(data.error || "Failed to fetch comments");
 
-            // Extract JSON and parse
             const extractedJson = data.suggestions.split("```json")[1].split("```")[0];
             let dataArray: Comment[] = JSON.parse(extractedJson);
 
-            // Decode HTML entities and replace <br> with newlines
             dataArray = dataArray.map((item) => ({
                 ...item,
-                comment: he.decode(item.comment).replace(/<br\s*\/?>/gi, "\n"), // Fix encoding + line breaks
+                comment: he.decode(item.comment).replace(/<br\s*\/?>/gi, "\n"),
             }));
 
             setSuggestions(dataArray);
@@ -51,10 +49,13 @@ const YouTubeTool = () => {
     return (
         <div className="max-w-2xl mx-auto my-10 p-6 bg-white shadow-lg rounded-lg">
             <h1 className="text-2xl sm:text-3xl font-bold mb-4 text-center">
-                YouTube Comment Analyzer
+                YouTube Comment Tool
             </h1>
 
-            {/* Input & Button - Now Responsive */}
+            <p className="text-gray-600 text-center mb-6 italic">
+                This tool analyzes viewer feedback to uncover potential video topics, improvements, and collaboration opportunities.
+            </p>
+
             <div className="flex flex-col sm:flex-row gap-2">
                 <input
                     type="text"
@@ -65,7 +66,7 @@ const YouTubeTool = () => {
                 />
                 <button
                     onClick={handleFetchComments}
-                    className="bg-blue-500 text-white p-3 rounded-md min-w-[120px]"
+                    className="bg-blue-500 text-white p-3 rounded-md min-w-[120px] hover:bg-blue-600 transition-colors"
                     disabled={loading}
                 >
                     {loading ? "Fetching..." : "Analyze"}
@@ -88,7 +89,7 @@ const YouTubeTool = () => {
                                     href={item.author_channel}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="text-blue-600 text-sm"
+                                    className="text-blue-600 text-sm hover:underline"
                                 >
                                     - {item.author_name}
                                 </a>

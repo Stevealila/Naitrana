@@ -10,7 +10,7 @@ const page = async (props: { params: Promise<{ id: string }> }) => {
   const session = await auth();
   const blog = await prisma.blog.findUnique({ where: { id: params.id } })
 
-  if (!session?.user?.email) redirect('/')
+  if (!session?.user?.email) redirect('/blogs')
   if (!blog) return <div>Blog not found</div>
 
   return (

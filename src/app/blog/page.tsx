@@ -3,18 +3,14 @@ import Link from 'next/link'
 import DeleteBlog from '@/components/DeleteBlog'
 import CustomReactMarkdown from '@/components/CustomReactMarkdown'
 import { auth } from '@/auth'
-import { redirect } from 'next/navigation'
+import AuthWrapper from "@/components/AuthWrapper"
 
 const Blog: React.FC = async () => {
     const session = await auth()
-    const loggedInUser = session?.user
-    const isEditor = loggedInUser?.email === 'stevealila25@gmail.com'
-    // If user is not logged in, redirect to the Google login page
-    if (!session?.user) return redirect("/api/auth/signin?callbackUrl=/blog")
-    // Fetch blogs from the database
+    const isEditor = session?.user?.email === 'stevealila25@gmail.com'
     const allBlogs = await prisma.blog.findMany({ orderBy: { updatedAt: 'desc' } })
 
-    return (
+    const BlogContent = () => (
         <div>
             {allBlogs.length > 0 && allBlogs.map(blog => (
                 <div key={blog.id} className="max-w-sm rounded overflow-hidden shadow-lg w-5/6 mx-auto flex flex-col items-center justify-center mb-8">
@@ -42,6 +38,12 @@ const Blog: React.FC = async () => {
                 </div>
             ))}
         </div>
+    )
+
+    return (
+        <AuthWrapper callbackUrl="/blog">
+            <BlogContent />
+        </AuthWrapper>
     )
 }
 
