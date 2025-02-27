@@ -26,8 +26,7 @@ const Navbar = async ({ session }: { session: Session | null }) => {
   return (
         <ul className="flex flex-wrap justify-center sm:justify-end items-center gap-4 border-b p-3">
         <Link href='/tools' className='bg-gray-200 rounded-full px-3 py-1 mx-1 text-sm font-semibold text-gray-700 hover:bg-gray-300'>Tools</Link>
-        <Link href='/blog' className='bg-gray-200 rounded-full px-3 py-1 mx-1 text-sm font-semibold text-gray-700 hover:bg-gray-300'>Blog</Link>
-          {/* Show Create Blog link only if the user is an editor */}
+        {/* <Link href='/blog' className='bg-gray-200 rounded-full px-3 py-1 mx-1 text-sm font-semibold text-gray-700 hover:bg-gray-300'>Blog</Link> */}
           {isEditor && (
             <li className="mr-4">
               <Link href="/blog/create">

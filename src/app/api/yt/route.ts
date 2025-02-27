@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
-import { GoogleGenerativeAI } from "@google/generative-ai"
+// import { GoogleGenerativeAI } from "@google/generative-ai"
+import { ChatGoogleGenerativeAI } from "@langchain/google-genai"
+import { StringOutputParser } from "@langchain/core/output_parsers"
+import { ChatPromptTemplate } from "@langchain/core/prompts"
 
 const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY
 
@@ -9,6 +12,7 @@ type Comment = {
     author_channel: string
 }
 
+
 export async function POST(req: NextRequest) {
     try {
         const { videoUrl } = await req.json()
@@ -16,12 +20,12 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "Video URL is required" }, { status: 400 })
         }
 
-        const videoId = getYouTubeVideoId(videoUrl)
+        const videoId = getVideoId(videoUrl)
         if (!videoId) {
             return NextResponse.json({ error: "Invalid YouTube URL" }, { status: 400 })
         }
 
-        const comments = await fetchYouTubeComments(videoId)
+        const comments = await fetchComments(videoId)
         const suggestions = await analyzeComments(comments)
 
         return NextResponse.json({ videoId, suggestions })
@@ -31,7 +35,8 @@ export async function POST(req: NextRequest) {
     }
 }
 
-function getYouTubeVideoId(url: string): string | null {
+
+function getVideoId(url: string): string | null {
     try {
         const parsedUrl = new URL(url)
         const hostname = parsedUrl.hostname
@@ -53,7 +58,8 @@ function getYouTubeVideoId(url: string): string | null {
     }
 }
 
-async function fetchYouTubeComments(videoId: string): Promise<Comment[]> {
+
+async function fetchComments(videoId: string): Promise<Comment[]> {
     const url = `https://www.googleapis.com/youtube/v3/commentThreads?part=snippet,replies&videoId=${videoId}&maxResults=100&order=relevance&key=${GOOGLE_API_KEY}`
 
     const response = await fetch(url)
@@ -67,22 +73,26 @@ async function fetchYouTubeComments(videoId: string): Promise<Comment[]> {
     }))
 }
 
-async function analyzeComments(comments: Comment[]): Promise<string> {
-    if (!GOOGLE_API_KEY) throw new Error("Missing Gemini AI API key")
 
-    const genAI = new GoogleGenerativeAI(GOOGLE_API_KEY)
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" })
+async function analyzeComments(comments: Comment[]): Promise<string> { 
+    // const genAI = new GoogleGenerativeAI(GOOGLE_API_KEY)
+    // const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" })
+    const model = new ChatGoogleGenerativeAI({ model: "gemini-2.0-flash", apiKey: GOOGLE_API_KEY })
 
-    const prompt = `
+    const prompt = ChatPromptTemplate.fromTemplate(`
         You are an expert in audience engagement and content strategy.
         Extract YouTube comments that suggest new video topics, improvements, or collaborations.
         If no such comments exist, return an empty array.
 
         Here are the comments:
-        ${JSON.stringify(comments)}
-    `
+        {comments}
+    `)
 
-    const response = await model.generateContent(prompt)
-    const result = await response.response
-    return result.text()
+    const parser = new StringOutputParser()
+    const chain = prompt.pipe(model).pipe(parser)
+    // const response = await model.generateContent(prompt)
+    // const result = await response.response
+    const result = await chain.invoke({ comments: JSON.stringify(comments) })
+    // return result.text()
+    return result
 }
