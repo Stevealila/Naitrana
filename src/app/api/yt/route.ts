@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server"
-// import { GoogleGenerativeAI } from "@google/generative-ai"
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai"
 import { StringOutputParser } from "@langchain/core/output_parsers"
 import { ChatPromptTemplate } from "@langchain/core/prompts"
@@ -75,8 +74,6 @@ async function fetchComments(videoId: string): Promise<Comment[]> {
 
 
 async function analyzeComments(comments: Comment[]): Promise<string> { 
-    // const genAI = new GoogleGenerativeAI(GOOGLE_API_KEY)
-    // const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" })
     const model = new ChatGoogleGenerativeAI({ model: "gemini-2.0-flash", apiKey: GOOGLE_API_KEY })
 
     const prompt = ChatPromptTemplate.fromTemplate(`
@@ -90,9 +87,7 @@ async function analyzeComments(comments: Comment[]): Promise<string> {
 
     const parser = new StringOutputParser()
     const chain = prompt.pipe(model).pipe(parser)
-    // const response = await model.generateContent(prompt)
-    // const result = await response.response
     const result = await chain.invoke({ comments: JSON.stringify(comments) })
-    // return result.text()
+
     return result
 }
