@@ -19,7 +19,7 @@ const Navbar = async ({ session }: { session: Session | null }) => {
     })
   }
 
-  const isEditor = loggedInUser?.email === 'stevealila25@gmail.com'
+  const isEditor = loggedInUser?.email === 'process.env.ADMIN_EMAIL'
 
   if (!loggedInUser) return ''
 

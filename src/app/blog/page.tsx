@@ -7,7 +7,7 @@ import AuthWrapper from "@/components/AuthWrapper"
 
 const Blog: React.FC = async () => {
     const session = await auth()
-    const isEditor = session?.user?.email === 'stevealila25@gmail.com'
+    const isEditor = session?.user?.email === 'process.env.ADMIN_EMAIL'
     const allBlogs = await prisma.blog.findMany({ orderBy: { updatedAt: 'desc' } })
 
     const BlogContent = () => (

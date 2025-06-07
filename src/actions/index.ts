@@ -61,7 +61,7 @@ export const updateBlog = async (id: string, formData: FormData, userEmail: stri
     }
   
     // Only allow the update if the logged-in user is the author or an admin
-    if (blog.author.email !== userEmail && userEmail !== 'stevealila25@gmail.com') {
+    if (blog.author.email !== userEmail && userEmail !== 'process.env.ADMIN_EMAIL') {
       throw new Error('You are not authorized to update this blog');
     }
   
@@ -91,7 +91,7 @@ export const deleteBlog = async (id: string, userEmail: string) => {
     }
   
     // Only allow the deletion if the logged-in user is the author or an admin
-    if (blog.author.email !== userEmail && userEmail !== 'stevealila25@gmail.com') {
+    if (blog.author.email !== userEmail && userEmail !== 'process.env.ADMIN_EMAIL') {
       throw new Error('You are not authorized to delete this blog');
     }
   
